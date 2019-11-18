@@ -1,0 +1,33 @@
+query BrowseAnimeQuery($page: Int!) {
+  Page (page: $page) {
+    pageInfo {
+      total
+      perPage
+      currentPage
+      lastPage
+      hasNextPage
+    }
+    media (type: ANIME, season: FALL, sort: [TITLE_ROMAJI]) {
+      id
+      title {
+        userPreferred
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      type
+      format
+      genres
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      season
+    }
+  }
+}

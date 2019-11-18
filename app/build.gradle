@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'com.apollographql.android'
+
 def room_version = "2.2.1"
 android {
     compileSdkVersion 29
@@ -24,8 +26,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    repositories {
+        jcenter()
+    }
+
     androidExtensions {
         experimental = true
+    }
+    kapt {
+        generateStubs = true
+    }
+    apollo {
+        generateKotlinModels = true // or false
     }
 }
 
@@ -54,7 +66,10 @@ dependencies {
     implementation 'com.jakewharton.rxbinding3:rxbinding-swiperefreshlayout:3.0.0'
     implementation 'com.jakewharton.rxbinding3:rxbinding-viewpager:3.0.0'
     implementation 'com.jakewharton.rxbinding3:rxbinding-material:3.0.0'
+    implementation("org.jetbrains:annotations:13.0")
+    testImplementation("org.jetbrains:annotations:13.0")
 
+    implementation "com.apollographql.apollo:apollo-runtime:1.2.1"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
@@ -62,8 +77,8 @@ dependencies {
     implementation "com.squareup.moshi:moshi:1.9.1"
 
     api 'com.google.dagger:dagger:2.6.1'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.6.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
+    kapt 'com.google.dagger:dagger-compiler:2.6.1'
+    kapt 'com.github.bumptech.glide:compiler:4.10.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

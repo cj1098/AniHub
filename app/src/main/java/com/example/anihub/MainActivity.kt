@@ -15,15 +15,26 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
+import api.BrowseAnimeQuery
+import com.apollographql.apollo.ApolloCall
+import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.api.Response
+import com.apollographql.apollo.exception.ApolloException
+import com.example.anihub.dagger.DaggerAppComponent
 import com.example.anihub.ui.main.SectionsPagerAdapter
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
+    @Inject
+    lateinit var apolloClient: ApolloClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        DaggerAppComponent.create().inject(this)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         toolbar.setTitle(R.string.app_name)
         setSupportActionBar(toolbar)
@@ -46,6 +57,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val navView: NavigationView = findViewById(R.id.nav_view)
         navView.setNavigationItemSelectedListener(this)
+        val test = BrowseAnimeQuery(1)
+
+        apolloClient.query(test).enqueue(object: ApolloCall.Callback<BrowseAnimeQuery.Data>() {
+            override fun onFailure(e: ApolloException) {
+                Snackbar.make(navView, "failed", Snackbar.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(response: Response<BrowseAnimeQuery.Data>) {
+                println(response.data())
+            }
+        })
+
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -53,7 +76,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
