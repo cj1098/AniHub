@@ -1,12 +1,19 @@
 package com.example.anihub
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.ViewAnimationUtils
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.fragment.app.transaction
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -20,8 +27,9 @@ import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
-import com.example.anihub.dagger.DaggerAppComponent
+import com.example.anihub.di.DaggerAppComponent
 import com.example.anihub.ui.main.SectionsPagerAdapter
+import kotlinx.android.synthetic.main.app_bar_main.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -57,18 +65,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val navView: NavigationView = findViewById(R.id.nav_view)
         navView.setNavigationItemSelectedListener(this)
-        val test = BrowseAnimeQuery(1)
-
-        apolloClient.query(test).enqueue(object: ApolloCall.Callback<BrowseAnimeQuery.Data>() {
-            override fun onFailure(e: ApolloException) {
-                Snackbar.make(navView, "failed", Snackbar.LENGTH_SHORT).show()
-            }
-
-            override fun onResponse(response: Response<BrowseAnimeQuery.Data>) {
-                println(response.data())
-            }
-        })
-
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -84,4 +80,78 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
+    // region extension functions
+//    fun AppCompatActivity.addFragment(frameId: Int, fragment: Fragment, tag: String) {
+//        supportFragmentManager.commit(false, { add(frameId, fragment, tag) }, "")
+//    }
+//
+//    fun AppCompatActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String, isSharedElement: Boolean, sharedView: View) {
+//        if (isSharedElement) {
+//            supportFragmentManager.transactionWithSharedElements({replace(frameId, fragment, tag)}, tag, sharedView)
+//        } else {
+//            supportFragmentManager.transaction({ replace(frameId, fragment, tag) }, tag)
+//        }
+//    }
+//
+//    // Could make the sharedView into a map of sharedView's with the transitionNames as the keys.
+//    inline fun FragmentManager.transactionWithSharedElements(function: FragmentTransaction.() -> FragmentTransaction, tag: String, sharedView: View) {
+//        if (!tag.isEmpty()) {
+//            ViewCompat.getTransitionName(sharedView)?.let { beginTransaction().function().addSharedElement(sharedView, it).addToBackStack(tag).commit() }
+//        } else {
+//            ViewCompat.getTransitionName(sharedView)?.let { beginTransaction().function().addSharedElement(sharedView, it).commit() }
+//        }
+//    }
+//
+//    inline fun FragmentManager.transaction(function: FragmentTransaction.() -> FragmentTransaction, tag: String) {
+//        if (!tag.isEmpty()) {
+//            beginTransaction().function().addToBackStack(tag).commit()
+//        } else {
+//            beginTransaction().function().commit()
+//        }
+//    }
+
+    // endregion
+
+//    fun animateSearchToolbar(numberOfMenuIcon: Int, containsOverflow: Boolean, show: Boolean) {
+//
+//        toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+//        window.statusBarColor = (ContextCompat.getColor(this, R.color.quantum_grey_600))
+//
+//        if (show) {
+//            val width = toolbar.width -
+//                    (if (containsOverflow) resources.getDimensionPixelSize(R.dimen.action_button_overflow_material_width) else 0) -
+//                    resources.getDimensionPixelSize(R.dimen.action_button_material_width) * numberOfMenuIcon / 2
+//            val createCircularReveal = ViewAnimationUtils.createCircularReveal(
+//                toolbar,
+//                width,
+//                toolbar.height / 2,
+//                0.0f,
+//                width.toFloat()
+//            )
+//            createCircularReveal.duration = CIRCULAR_REVEAL_ANIMATION_DURATION
+//            createCircularReveal.start()
+//        } else {
+//            val width = toolbar.width -
+//                    (if (containsOverflow) resources.getDimensionPixelSize(R.dimen.action_button_overflow_material_width) else 0) -
+//                    resources.getDimensionPixelSize(R.dimen.action_button_material_width) * numberOfMenuIcon / 2
+//            val createCircularReveal = ViewAnimationUtils.createCircularReveal(
+//                toolbar,
+//                width,
+//                toolbar.height / 2,
+//                width.toFloat(),
+//                0.0f
+//            )
+//            createCircularReveal.duration = CIRCULAR_REVEAL_ANIMATION_DURATION
+//            createCircularReveal.addListener(object : AnimatorListenerAdapter() {
+//                override fun onAnimationEnd(animation: Animator) {
+//                    super.onAnimationEnd(animation)
+//                    toolbar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
+//                    window.statusBarColor = (ContextCompat.getColor(this@MainActivity, R.color.colorPrimaryDark))
+//                }
+//            })
+//            createCircularReveal.start()
+//            window.statusBarColor = (ContextCompat.getColor(this, R.color.colorPrimaryDark))
+//        }
+//    }
 }

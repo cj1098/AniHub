@@ -1,4 +1,4 @@
-package com.example.anihub.dagger.modules
+package com.example.anihub.di.modules
 
 import com.apollographql.apollo.ApolloClient
 import com.example.anihub.BASE_URL
@@ -7,9 +7,8 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 
 @Module
-object ApiModule {
+class ApiModule {
 
-    @JvmStatic
     @Provides
     fun providesApolloClient(): ApolloClient {
 //        if (BuildConfig.DEBUG) {

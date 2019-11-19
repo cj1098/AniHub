@@ -19,4 +19,11 @@
     <string name="tab_text_new">NEW</string>
     <string name="tab_text_anime">ANIME</string>
     <string name="tab_text_manga">MANGA</string>
+    
+    
+    
+    
+    <!-- ERRORS -->
+    
+    <string name="anime_list_empty_results">Sorry, Either the anime API is down or you dunn GOOFED.</string>
 </resources>

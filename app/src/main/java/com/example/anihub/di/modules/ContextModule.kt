@@ -1,4 +1,4 @@
-package com.example.anihub.dagger.modules
+package com.example.anihub.di.modules
 
 import android.app.Application
 import android.content.Context
