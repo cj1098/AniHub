@@ -1,5 +1,6 @@
 package com.example.anihub.ui.anime.list
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,23 +11,36 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.apollographql.apollo.ApolloClient
+import com.example.anihub.BaseFragment
 import com.example.anihub.R
 import com.example.anihub.di.DaggerAppComponent
 import com.example.anihub.ui.GridSpaceDecoration
 import com.example.anihub.ui.anime.ViewModelFactory
+import com.example.anihub.ui.anime.shared.AnimeSharedViewModel
 import kotlinx.android.synthetic.main.fragment_anime_list.*
 import javax.inject.Inject
 
-class AnimeListFragment : Fragment() {
+class AnimeListFragment : BaseFragment() {
 
     @Inject
     lateinit var apolloClient: ApolloClient
 
     private lateinit var animeListAdapter: AnimeListAdapter
-    private lateinit var animeListViewModel: AnimeListViewModel
+    private lateinit var animeSharedViewModel: AnimeSharedViewModel
+
+    private lateinit var listener: AnimeListInterface
 
     @Inject
     lateinit var modelFactory: ViewModelFactory
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is AnimeListInterface) {
+            listener = context
+        } else {
+            throw ClassCastException(context.toString() + getString(R.string.no_implementation, TAG))
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,21 +64,21 @@ class AnimeListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         activity?.let {
-            animeListViewModel = modelFactory.create(AnimeListViewModel::class.java)
+            animeSharedViewModel = modelFactory.create(AnimeSharedViewModel::class.java)
         }
         anime_list.layoutManager = GridLayoutManager(view.context, 4)
         anime_list.addItemDecoration(GridSpaceDecoration(10))
         animeListAdapter =
-            AnimeListAdapter(requireContext())
+            AnimeListAdapter(requireContext(), listener)
         anime_list.adapter = animeListAdapter
         setupObservableViewModels()
-        animeListViewModel.getAllAnime(1)
+        animeSharedViewModel.loadAllAnime(1)
         super.onViewCreated(view, savedInstanceState)
 
     }
 
     private fun setupObservableViewModels() {
-        animeListViewModel.browseAllAnimeLiveData.observe(this, Observer { it ->
+        animeSharedViewModel.browseAllAnimeLiveData.observe(this, Observer { it ->
             it.data()?.page?.media.let {
                 if (!it.isNullOrEmpty()) {
                     initial_loading_pb.isGone = true
@@ -78,13 +92,12 @@ class AnimeListFragment : Fragment() {
             }
         })
 
-        animeListViewModel.browseAllAnimeError.observe(this, Observer {
-        })
+        animeSharedViewModel.animeError.observe(this, Observer {onError(it)})
     }
 
-//    interface OnAnimeSelected {
-//        fun onAnimeItemSelected(githubRepository: GithubRepository, transitionName: String, sharedView: View)
-//    }
+    interface AnimeListInterface {
+        fun onAnimeItemSelected(id: Int, transitionName: String, sharedView: View)
+    }
 
     companion object {
         @JvmField

@@ -21,7 +21,8 @@
     <string name="tab_text_manga">MANGA</string>
     
     
-    
+
+    <string name="no_implementation">You have not implemented the correct interface or abstract functions required for this class %s</string>
     
     <!-- ERRORS -->
     

@@ -2,6 +2,7 @@ package com.example.anihub.di.modules
 
 import com.apollographql.apollo.ApolloClient
 import com.example.anihub.BASE_URL
+import com.example.anihub.ui.anime.shared.AnimeSharedRepository
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -27,5 +28,12 @@ class ApiModule {
             }
             .build()
         return ApolloClient.builder().okHttpClient(okHttpClient).serverUrl(BASE_URL).build()
+    }
+
+    @Provides
+    fun providesAnimeRepository(apolloClient: ApolloClient): AnimeSharedRepository {
+        return AnimeSharedRepository(
+            apolloClient
+        )
     }
 }

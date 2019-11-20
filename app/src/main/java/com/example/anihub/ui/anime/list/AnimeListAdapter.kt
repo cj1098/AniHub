@@ -4,13 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import api.BrowseAnimeQuery
 import com.bumptech.glide.Glide
 import com.example.anihub.R
 import kotlinx.android.synthetic.main.adapter_row_anime_list.view.*
 
-class AnimeListAdapter(val context: Context) : RecyclerView.Adapter<AnimeListAdapter.ViewHolder>() {
+class AnimeListAdapter(val context: Context, val listener: AnimeListFragment.AnimeListInterface) : RecyclerView.Adapter<AnimeListAdapter.ViewHolder>() {
 
     private var items: List<BrowseAnimeQuery.Medium> = emptyList()
 
@@ -24,10 +25,12 @@ class AnimeListAdapter(val context: Context) : RecyclerView.Adapter<AnimeListAda
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        ViewCompat.setTransitionName(holder.itemView.anime_image, "transition$position")
+        holder.itemView.setOnClickListener{ listener.onAnimeItemSelected(items[position].id, "transition$position", holder.itemView.anime_image)}
         holder.bind(items[position])
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         fun bind(item: BrowseAnimeQuery.Medium?) {
             item?.let {
                 Glide.with(itemView.context).load(item.coverImage?.large)
@@ -38,6 +41,10 @@ class AnimeListAdapter(val context: Context) : RecyclerView.Adapter<AnimeListAda
                 itemView.anime_title.text = item.title?.romaji
                 itemView.anime_rating.rating = item.averageScore?.toFloat()?.times(5)?.div(100f) ?: 0f
             }
+
+        }
+
+        override fun onClick(v: View?) {
         }
     }
 

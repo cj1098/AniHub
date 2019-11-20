@@ -2,18 +2,19 @@ package com.example.anihub
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewAnimationUtils
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import androidx.fragment.app.transaction
+import androidx.fragment.app.*
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -28,11 +29,15 @@ import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.example.anihub.di.DaggerAppComponent
+import com.example.anihub.ui.anime.detail.AnimeActivity
+import com.example.anihub.ui.anime.detail.AnimeDetailFragment
+import com.example.anihub.ui.anime.list.AnimeListFragment
 import com.example.anihub.ui.main.SectionsPagerAdapter
 import kotlinx.android.synthetic.main.app_bar_main.*
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+    AnimeListFragment.AnimeListInterface {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -48,7 +53,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
 
         val tabLayout: TabLayout = findViewById(R.id.tabs)
-        val viewPager: ViewPager  = findViewById(R.id.view_pager)
+        val viewPager: ViewPager = findViewById(R.id.view_pager)
         tabLayout.setupWithViewPager(viewPager)
 
         val tabsPager = SectionsPagerAdapter(this, supportFragmentManager)
@@ -59,7 +64,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .setAction("Action", null).show()
         }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val actionBarDrawerToggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        val actionBarDrawerToggle = ActionBarDrawerToggle(
+            this,
+            drawerLayout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
 
@@ -81,39 +92,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    // region extension functions
-//    fun AppCompatActivity.addFragment(frameId: Int, fragment: Fragment, tag: String) {
-//        supportFragmentManager.commit(false, { add(frameId, fragment, tag) }, "")
-//    }
-//
-//    fun AppCompatActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String, isSharedElement: Boolean, sharedView: View) {
-//        if (isSharedElement) {
-//            supportFragmentManager.transactionWithSharedElements({replace(frameId, fragment, tag)}, tag, sharedView)
-//        } else {
-//            supportFragmentManager.transaction({ replace(frameId, fragment, tag) }, tag)
-//        }
-//    }
-//
-//    // Could make the sharedView into a map of sharedView's with the transitionNames as the keys.
-//    inline fun FragmentManager.transactionWithSharedElements(function: FragmentTransaction.() -> FragmentTransaction, tag: String, sharedView: View) {
-//        if (!tag.isEmpty()) {
-//            ViewCompat.getTransitionName(sharedView)?.let { beginTransaction().function().addSharedElement(sharedView, it).addToBackStack(tag).commit() }
-//        } else {
-//            ViewCompat.getTransitionName(sharedView)?.let { beginTransaction().function().addSharedElement(sharedView, it).commit() }
-//        }
-//    }
-//
-//    inline fun FragmentManager.transaction(function: FragmentTransaction.() -> FragmentTransaction, tag: String) {
-//        if (!tag.isEmpty()) {
-//            beginTransaction().function().addToBackStack(tag).commit()
-//        } else {
-//            beginTransaction().function().commit()
-//        }
-//    }
+    override fun onAnimeItemSelected(
+        id: Int,
+        transitionName: String,
+        sharedView: View
+    ) {
+        val intent = Intent(this, AnimeActivity::class.java)
+        intent.putExtra(ID, id)
+        startActivity(intent)
+//        ViewCompat.getTransitionName(sharedView)?.let { replaceFragment(R.id.content,
+//            AnimeDetailFragment.newInstance(id, it), AnimeDetailFragment.TAG, true, sharedView) }
+    }
 
-    // endregion
-
-//    fun animateSearchToolbar(numberOfMenuIcon: Int, containsOverflow: Boolean, show: Boolean) {
+    //    fun animateSearchToolbar(numberOfMenuIcon: Int, containsOverflow: Boolean, show: Boolean) {
 //
 //        toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
 //        window.statusBarColor = (ContextCompat.getColor(this, R.color.quantum_grey_600))
@@ -154,4 +145,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //            window.statusBarColor = (ContextCompat.getColor(this, R.color.colorPrimaryDark))
 //        }
 //    }
+
+    companion object {
+        @JvmField
+        val TAG = MainActivity::class.java
+
+        const val ID = "ID"
+    }
 }
