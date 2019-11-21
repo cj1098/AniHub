@@ -60,15 +60,14 @@ class AnimeDetailFragment : BaseFragment() {
     private fun setupObservableViewModels() {
         animeSharedViewModel.searchAnimeByIdLiveData.observe(this, Observer { it ->
             it.data()?.media?.let {
-                val bannerImage = if (!it.bannerImage.isNullOrEmpty()) {
-                    return@let it.bannerImage
-                } else it.coverImage?.large
-                Glide.with(requireContext()).load(bannerImage).into(object : CustomTarget<Drawable>() {
+                val bannerImage = if (!it.bannerImage.isNullOrEmpty()) it.bannerImage else it.coverImage?.large
+
+                Glide.with(requireContext()).load(it.coverImage?.large).into(object : CustomTarget<Drawable>() {
                     override fun onResourceReady(
                         resource: Drawable,
                         transition: Transition<in Drawable>?
                     ) {
-                        anime_detail_root_view.background = resource
+                        anime_banner_image.setImageDrawable(resource)
                     }
                     override fun onLoadFailed(errorDrawable: Drawable?) {
                         Log.e("error", "eep")
@@ -78,7 +77,7 @@ class AnimeDetailFragment : BaseFragment() {
                     }
 
                 })
-                Glide.with(requireContext()).load(it.coverImage?.large).into(expanded_image)
+                Glide.with(requireContext()).load(bannerImage).into(expanded_image)
                 anime_detail_description.text = it.description
             }
         })

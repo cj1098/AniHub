@@ -10,8 +10,12 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 
+fun AppCompatActivity.addFragmentToBackstack(frameId: Int, fragment: Fragment, tag: String) {
+    supportFragmentManager.commit(true) { add(frameId, fragment, tag).addToBackStack(tag) }
+}
+
 fun AppCompatActivity.addFragment(frameId: Int, fragment: Fragment, tag: String) {
-    supportFragmentManager.commit(false) { add(frameId, fragment, tag).addToBackStack(tag) }
+    supportFragmentManager.commit(true) { add(frameId, fragment, tag) }
 }
 
 fun AppCompatActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String, isSharedElement: Boolean, sharedView: View) {

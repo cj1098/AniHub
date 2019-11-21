@@ -71,6 +71,7 @@ dependencies {
     testImplementation("org.jetbrains:annotations:13.0")
 
     implementation "com.apollographql.apollo:apollo-runtime:1.2.1"
+    implementation 'com.apollographql.apollo:apollo-android-support:1.2.1'
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"

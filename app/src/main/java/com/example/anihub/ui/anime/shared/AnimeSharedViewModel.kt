@@ -25,7 +25,6 @@ class AnimeSharedViewModel @Inject constructor(private val animeSharedRepository
             override fun onResponse(response: Response<BrowseAnimeQuery.Data>) {
                 browseAllAnimeLiveData.postValue(response)
             }
-
         })
     }
 

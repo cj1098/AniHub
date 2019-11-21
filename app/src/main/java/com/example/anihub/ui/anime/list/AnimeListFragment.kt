@@ -92,7 +92,7 @@ class AnimeListFragment : BaseFragment() {
             }
         })
 
-        animeSharedViewModel.animeError.observe(this, Observer {onError(it)})
+        animeSharedViewModel.animeError.observe(this, Observer { onError(it)})
     }
 
     interface AnimeListInterface {
