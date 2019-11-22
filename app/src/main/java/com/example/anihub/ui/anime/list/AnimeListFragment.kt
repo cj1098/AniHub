@@ -11,7 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.cache.normalized.sql.SqlNormalizedCache
+import com.example.anihub.AniHubApplication
 import com.example.anihub.BaseFragment
+import com.example.anihub.CacheFactory
 import com.example.anihub.R
 import com.example.anihub.di.DaggerAppComponent
 import com.example.anihub.ui.GridSpaceDecoration
@@ -21,9 +24,6 @@ import kotlinx.android.synthetic.main.fragment_anime_list.*
 import javax.inject.Inject
 
 class AnimeListFragment : BaseFragment() {
-
-    @Inject
-    lateinit var apolloClient: ApolloClient
 
     private lateinit var animeListAdapter: AnimeListAdapter
     private lateinit var animeSharedViewModel: AnimeSharedViewModel
@@ -44,7 +44,7 @@ class AnimeListFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerAppComponent.create().inject(this)
+        AniHubApplication.graph.inject(this)
     }
 
     override fun onCreateView(

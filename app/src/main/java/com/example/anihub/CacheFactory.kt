@@ -18,7 +18,7 @@ class CacheFactory(val context: Context) {
     fun <T : NormalizedCache> provideNormalizedDiskCache(): Pair<NormalizedCacheFactory<T>, CacheKeyResolver> {
         // Create the ApolloSqlHelper. Please note that if null is passed in as the name, you will get an in-memory
         // Sqlite database that will not persist across restarts of the app.
-        val apolloSqlHelper = ApolloSqlHelper.create(context, "db_name")
+        val apolloSqlHelper = ApolloSqlHelper.create(context, "anihub_db")
 
         // Create NormalizedCacheFactory
         val cacheFactory: NormalizedCacheFactory<T> = SqlNormalizedCacheFactory(apolloSqlHelper) as NormalizedCacheFactory<T>
@@ -27,7 +27,7 @@ class CacheFactory(val context: Context) {
         val resolver: CacheKeyResolver = object : CacheKeyResolver() {
             @NotNull
             override fun fromFieldRecordSet(@NotNull field: ResponseField, @NotNull recordSet: Map<String, Any>): CacheKey {
-                return formatCacheKey(recordSet["id"] as String?)
+                return formatCacheKey(recordSet["media"] as String?)
             }
 
             override fun fromFieldArguments(field: ResponseField, @NonNull variables: Variables): CacheKey {

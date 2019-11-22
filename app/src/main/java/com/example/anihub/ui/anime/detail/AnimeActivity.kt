@@ -1,6 +1,7 @@
 package com.example.anihub.ui.anime.detail
 
 import android.os.Bundle
+import com.example.anihub.AniHubApplication
 import com.example.anihub.BaseActivity
 import com.example.anihub.R
 import com.example.anihub.addFragment
@@ -12,7 +13,7 @@ class AnimeActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anime)
-        DaggerAppComponent.create().inject(this)
+        AniHubApplication.graph.inject(this)
 
         // CHRIS: REVISIT THIS. NOT GOOD. Need to check if arguments are null for whatever reason and fix this shit appropriately. MMKAY?
         setSupportActionBar(toolbar)

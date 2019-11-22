@@ -1,6 +1,7 @@
 package com.example.anihub.di
 
 import android.app.Application
+import android.content.Context
 import com.example.anihub.AniHubApplication
 import com.example.anihub.MainActivity
 import com.example.anihub.di.modules.ApiModule
@@ -12,24 +13,17 @@ import com.example.anihub.ui.anime.shared.AnimeSharedViewModel
 import com.example.anihub.ui.anime.ViewModelFactory
 import com.example.anihub.ui.anime.detail.AnimeActivity
 import com.example.anihub.ui.anime.detail.AnimeDetailFragment
-import dagger.Binds
+import dagger.BindsInstance
 import dagger.Component
+import dagger.android.AndroidInjector
+import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
-@Singleton
-@Component(
-    modules = [ContextModule::class, AppModule::class, CacheModule::class, ApiModule::class])
 
-// Revisit this and make it more scalable...
-interface AppComponent {
-//
-//    @Component.Builder
-//    interface Builder {
-//        @Binds
-//        fun application(application: Application): Builder
-//
-//        fun build(): AppComponent
-//    }
+@Component(
+    modules = [CacheModule::class, AppModule::class, ApiModule::class, ContextModule::class])
+@Singleton
+interface AppComponent{
 
     fun inject(myApplication: AniHubApplication)
     fun inject(mainActivity: MainActivity)

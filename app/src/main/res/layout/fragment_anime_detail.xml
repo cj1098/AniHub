@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/anime_detail_root_view"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
-
-    <ImageView
-        android:id="@+id/anime_banner_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"/>
-
 <androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#66000000"
     android:fitsSystemWindows="true">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="bottom"
+        android:background="?attr/colorPrimary"
+        app:layout_anchor="@+id/app_bar"
+        app:layout_anchorGravity="bottom"
+        app:tabGravity="fill"
+        app:tabMode="fixed" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -49,40 +50,22 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
-            android:background="@color/colorPrimary"
-            app:tabMode="scrollable"
-            app:tabIndicatorColor="@color/colorAccent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-        </com.google.android.material.tabs.TabLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+        android:layout_marginTop="?attr/actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:fillViewport="true">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/anime_details_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <!--android:fillViewport="true" -->
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/anime_detail_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/white"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:background="@color/green"
-                android:layout_height="400dp" />
-        </LinearLayout>
+    </androidx.viewpager.widget.ViewPager>
 
     </androidx.core.widget.NestedScrollView>
 
@@ -96,4 +79,3 @@
         app:srcCompat="@android:drawable/ic_dialog_info" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</FrameLayout>

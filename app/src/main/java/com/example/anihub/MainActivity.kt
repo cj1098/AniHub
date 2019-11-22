@@ -41,23 +41,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-    @Inject
-    lateinit var apolloClient: ApolloClient
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        DaggerAppComponent.create().inject(this)
+        AniHubApplication.graph.inject(this)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         toolbar.setTitle(R.string.app_name)
         setSupportActionBar(toolbar)
 
-        val tabLayout: TabLayout = findViewById(R.id.tabs)
-        val viewPager: ViewPager = findViewById(R.id.view_pager)
-        tabLayout.setupWithViewPager(viewPager)
+
 
         val tabsPager = SectionsPagerAdapter(this, supportFragmentManager)
-        viewPager.adapter = tabsPager
+        view_pager.adapter = tabsPager
+        tab_layout.setupWithViewPager(view_pager)
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)

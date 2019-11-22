@@ -1,13 +1,15 @@
 package com.example.anihub.di.modules
 
-import android.app.Application
 import android.content.Context
+import com.example.anihub.AniHubApplication
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
-@Module
-class ContextModule(private val application: Application) {
+@Module (includes = [AppModule::class])
+class ContextModule {
 
     @Provides
-    fun providesContext(): Context = application
+    @Singleton
+    fun providesContext(application: AniHubApplication): Context = application
 }

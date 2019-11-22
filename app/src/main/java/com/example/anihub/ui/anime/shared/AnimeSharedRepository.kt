@@ -5,6 +5,8 @@ import api.SearchAnimeByIdQuery
 import api.type.MediaType
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.ApolloQueryCall
+import com.apollographql.apollo.cache.normalized.sql.SqlNormalizedCache
+import com.example.anihub.CacheFactory
 import javax.inject.Inject
 
 class AnimeSharedRepository @Inject constructor(private val apolloClient: ApolloClient) {
