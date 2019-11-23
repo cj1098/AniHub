@@ -1,6 +1,12 @@
 query SearchAnimeByIdQuery($id: Int!) {
     Media(id: $id, type: ANIME) {
         id
+        studios {
+            nodes {
+                name
+                isAnimationStudio
+            }
+        }
         title {
             romaji
             english
@@ -38,6 +44,12 @@ query SearchAnimeByIdQuery($id: Int!) {
         source
         isAdult
         isFavourite
+        streamingEpisodes {
+            site
+            title
+            thumbnail
+            url
+        }
         nextAiringEpisode {
             airingAt
             timeUntilAiring

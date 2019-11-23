@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/black"
-    app:cardCornerRadius="5dp">
+    app:cardCornerRadius="3dp">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/anime_image"
+                android:id="@+id/anime_details_episode_thumbnail"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="fitXY"
@@ -42,34 +42,45 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/anime_title"
+                android:id="@+id/anime_detail_episode_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
                 android:layout_marginBottom="25dp"
-                android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:textSize="14sp"
                 android:textStyle="bold"
+                android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 tools:text="Code Geass" />
 
-            <RatingBar
-                android:id="@+id/anime_rating"
-                style="?android:attr/ratingBarStyleSmall"
+<!--            <TextView-->
+<!--                android:id="@+id/anime_detail_episode_air_date"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="bottom|center_horizontal"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textColor="@color/white"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                tools:text="2018-06-05" />-->
+
+            <ImageView
+                android:id="@+id/play_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center_horizontal"
-                android:numStars="5"
+                android:src="@drawable/play_button_overlay"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                tools:rating="4" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
+
 
 </androidx.cardview.widget.CardView>

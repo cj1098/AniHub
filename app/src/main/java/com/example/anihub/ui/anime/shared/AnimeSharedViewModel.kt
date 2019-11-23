@@ -10,33 +10,38 @@ import com.apollographql.apollo.exception.ApolloException
 import java.lang.Exception
 import javax.inject.Inject
 
-class AnimeSharedViewModel @Inject constructor(private val animeSharedRepository: AnimeSharedRepository): ViewModel() {
+class AnimeSharedViewModel @Inject constructor(private val animeSharedRepository: AnimeSharedRepository) :
+    ViewModel() {
 
     val browseAllAnimeLiveData: MutableLiveData<Response<BrowseAnimeQuery.Data>> = MutableLiveData()
-    val searchAnimeByIdLiveData: MutableLiveData<Response<SearchAnimeByIdQuery.Data>> = MutableLiveData()
+    val searchAnimeByIdLiveData: MutableLiveData<Response<SearchAnimeByIdQuery.Data>> =
+        MutableLiveData()
     val animeError: MutableLiveData<Exception> = MutableLiveData()
 
     fun loadAllAnime(page: Int) {
-        animeSharedRepository.getAllAnime(page).enqueue(object : ApolloCall.Callback<BrowseAnimeQuery.Data>() {
-            override fun onFailure(e: ApolloException) {
-                animeError.postValue(e)
-            }
+        animeSharedRepository.getAllAnime(page)
+            .enqueue(object : ApolloCall.Callback<BrowseAnimeQuery.Data>() {
+                override fun onFailure(e: ApolloException) {
+                    animeError.postValue(e)
+                }
 
-            override fun onResponse(response: Response<BrowseAnimeQuery.Data>) {
-                browseAllAnimeLiveData.postValue(response)
-            }
-        })
+                override fun onResponse(response: Response<BrowseAnimeQuery.Data>) {
+                    // manipulate our responses here so that they never send a nullable value if possible.
+                    browseAllAnimeLiveData.postValue(response)
+                }
+            })
     }
 
     fun loadAnimeById(id: Int) {
-        animeSharedRepository.getAnimeById(id).enqueue(object : ApolloCall.Callback<SearchAnimeByIdQuery.Data>() {
-            override fun onFailure(e: ApolloException) {
-                animeError.postValue(e)
-            }
+        animeSharedRepository.getAnimeById(id)
+            .enqueue(object : ApolloCall.Callback<SearchAnimeByIdQuery.Data>() {
+                override fun onFailure(e: ApolloException) {
+                    animeError.postValue(e)
+                }
 
-            override fun onResponse(response: Response<SearchAnimeByIdQuery.Data>) {
-                searchAnimeByIdLiveData.postValue(response)
-            }
-        })
+                override fun onResponse(response: Response<SearchAnimeByIdQuery.Data>) {
+                    searchAnimeByIdLiveData.postValue(response)
+                }
+            })
     }
 }

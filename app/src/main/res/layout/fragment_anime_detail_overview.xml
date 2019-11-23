@@ -1,23 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/green"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    <TextView
-        android:id="@+id/anime_detail_description"
+
+    <ImageView
+        android:id="@+id/anihub_logo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Sopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgp;osdfihjkgp;iosdfijgop;sdfg
-Sopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgp
-Sopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgp
-Sopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgp
+        android:src="@drawable/code_geass" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#C8000000" />
 
-Sopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgpSopasewierwhjftp09qwiahjurfgp908iadehsjfpgoishdjfpogsidfjgp
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="32dp">
 
-"/>
+        <TextView
+            android:id="@+id/anime_detail_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="10dp"
+            tools:text="Boy Anime" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/anime_detail_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginBottom="10dp"
+            tools:text="AniList : 7.5/10"/>
+
+        <TextView
+            android:id="@+id/anime_detail_information"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginBottom="10dp"
+            tools:text="2015 * 20 min * returning series * drama * ghibli * other" />
+
+        <TextView
+            android:id="@+id/anime_detail_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            tools:text="This anime is about a boy." />
+
+    </LinearLayout>
+
+</FrameLayout>

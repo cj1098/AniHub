@@ -12,21 +12,21 @@ private val TAB_TITLES = arrayOf(
     R.string.anime_details_tab_text_see_more
 )
 
-class AnimeDetailPagerAdapter (private val context: Context, fm: FragmentManager) :
+class AnimeDetailPagerAdapter (private val context: Context, fm: FragmentManager, private val id: Int) :
 FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     override fun getItem(position: Int): Fragment {
         // Fix this else statement
         return when (position) {
             0 -> {
-                return AnimeDetailOverviewFragment.newInstance()
+                return AnimeDetailOverviewFragment.newInstance(id)
             }
             1 -> {
-                return AnimeDetailEpisodesFragment.newInstance()
+                return AnimeDetailEpisodesFragment.newInstance(id)
             }
             2 -> {
                 return AnimeDetailSeeMoreFragment.newInstance()
             }
-            else -> AnimeDetailOverviewFragment.newInstance()
+            else -> AnimeDetailOverviewFragment.newInstance(id)
         }
     }
 

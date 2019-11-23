@@ -1,7 +1,5 @@
 package com.example.anihub.di
 
-import android.app.Application
-import android.content.Context
 import com.example.anihub.AniHubApplication
 import com.example.anihub.MainActivity
 import com.example.anihub.di.modules.ApiModule
@@ -12,11 +10,9 @@ import com.example.anihub.ui.anime.list.AnimeListFragment
 import com.example.anihub.ui.anime.shared.AnimeSharedViewModel
 import com.example.anihub.ui.anime.ViewModelFactory
 import com.example.anihub.ui.anime.detail.AnimeActivity
-import com.example.anihub.ui.anime.detail.AnimeDetailFragment
-import dagger.BindsInstance
+import com.example.anihub.ui.anime.detail.AnimeDetailEpisodesFragment
+import com.example.anihub.ui.anime.detail.AnimeDetailOverviewFragment
 import dagger.Component
-import dagger.android.AndroidInjector
-import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 
@@ -31,5 +27,6 @@ interface AppComponent{
     fun inject(animeSharedViewModel: AnimeSharedViewModel)
     fun inject(viewModelFactory: ViewModelFactory)
     fun inject(animeFragment: AnimeActivity)
-    fun inject(animeDetailFragment: AnimeDetailFragment)
+    fun inject(animeDetailOverviewFragment: AnimeDetailOverviewFragment)
+    fun inject(animeDetailEpisodesFragment: AnimeDetailEpisodesFragment)
 }
