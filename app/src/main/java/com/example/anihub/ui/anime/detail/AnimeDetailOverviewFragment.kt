@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.lifecycle.Observer
 import api.SearchAnimeByIdQuery
 import com.example.anihub.AniHubApplication
@@ -49,6 +50,7 @@ class AnimeDetailOverviewFragment : BaseFragment() {
     private fun setupObservableViewModels() {
         animeSharedViewModel.searchAnimeByIdLiveData.observe(this, Observer { it ->
             it.data()?.media?.let {
+                initial_loading_pb.isGone = true
                 anime_detail_title.text = it.title?.romaji
                 anime_detail_rating.text = getString(R.string.anime_details_rating, (it.averageScore?.toFloat()?.div(RATING_DIVIDER)?.times(10F)).toString())
                 anime_detail_information.text = getString(R.string.anime_details_information, it.startDate?.year.toString(), it.episodes.toString(), it.genres?.get(0), it.studios?.getAnimationStudioName())

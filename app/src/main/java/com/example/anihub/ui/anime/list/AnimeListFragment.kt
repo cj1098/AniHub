@@ -7,18 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.cache.normalized.sql.SqlNormalizedCache
+import androidx.recyclerview.widget.RecyclerView
 import com.example.anihub.AniHubApplication
 import com.example.anihub.BaseFragment
-import com.example.anihub.CacheFactory
 import com.example.anihub.R
-import com.example.anihub.di.DaggerAppComponent
 import com.example.anihub.ui.GridSpaceDecoration
 import com.example.anihub.ui.anime.ViewModelFactory
+import com.example.anihub.ui.anime.detail.PaginationScrollListener
 import com.example.anihub.ui.anime.shared.AnimeSharedViewModel
 import kotlinx.android.synthetic.main.fragment_anime_list.*
 import javax.inject.Inject
@@ -29,6 +26,10 @@ class AnimeListFragment : BaseFragment() {
     private lateinit var animeSharedViewModel: AnimeSharedViewModel
 
     private lateinit var listener: AnimeListInterface
+    private lateinit var layoutManager: RecyclerView.LayoutManager
+    private var isLastPage: Boolean = false
+    private var isLoading: Boolean = false
+    private var page = 1
 
     @Inject
     lateinit var modelFactory: ViewModelFactory
@@ -58,7 +59,6 @@ class AnimeListFragment : BaseFragment() {
 
         }
         return view
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,29 +66,66 @@ class AnimeListFragment : BaseFragment() {
         activity?.let {
             animeSharedViewModel = modelFactory.create(AnimeSharedViewModel::class.java)
         }
-        anime_list.layoutManager = GridLayoutManager(view.context, 4)
+        layoutManager = GridLayoutManager(view.context, 4)
+        anime_list.layoutManager = layoutManager
+        anime_list?.addOnScrollListener(object : PaginationScrollListener(layoutManager) {
+            override fun isLastPage(): Boolean {
+                return isLastPage
+            }
+
+            override fun isLoading(): Boolean {
+                return isLoading
+            }
+
+            override fun loadMoreItems() {
+                isLoading = true
+                loading_items_layout.isVisible = true
+                animeSharedViewModel.loadAllAnime(page)
+            }
+
+            override fun hideFAB() {
+                if (fab.isShown) {
+                    fab.hide()
+                }
+            }
+
+            override fun showFAB() {
+                fab.show()
+            }
+        })
         anime_list.addItemDecoration(GridSpaceDecoration(10))
         animeListAdapter =
             AnimeListAdapter(requireContext(), listener)
         anime_list.adapter = animeListAdapter
         setupObservableViewModels()
-        animeSharedViewModel.loadAllAnime(1)
+        animeSharedViewModel.loadAllAnime(page)
         super.onViewCreated(view, savedInstanceState)
 
     }
 
     private fun setupObservableViewModels() {
         animeSharedViewModel.browseAllAnimeLiveData.observe(this, Observer { it ->
-            it.data()?.page?.media.let {
-                if (!it.isNullOrEmpty()) {
+            it.data()?.let {
+                isLoading = false
+                loading_items_layout.isVisible = false
+                if (it.page?.pageInfo?.hasNextPage == true) {
+                    isLastPage = false
+                    page++
+                } else {
+                    isLastPage = true
+                }
+                if (it.page?.media?.isNullOrEmpty() == false) {
                     initial_loading_pb.isGone = true
                     empty_results_view.isGone = true
+                    it.page?.media?.let { items ->
+                        animeListAdapter.setItems(items.requireNoNulls().toMutableList())
+                    }
+
                 } else {
                     initial_loading_pb.isVisible = true
                     empty_results_view.isVisible = true
                     anime_list.isGone = true
                 }
-                animeListAdapter.setItems(it?.filterNotNull())
             }
         })
 

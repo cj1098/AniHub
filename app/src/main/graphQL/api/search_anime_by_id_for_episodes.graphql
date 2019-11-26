@@ -1,0 +1,12 @@
+query searchAnimeByIdEpisodeQuery($id: Int!) {
+    Media(id: $id, type: ANIME) {
+        id
+        streamingEpisodes {
+            title
+            thumbnail
+            url
+            site
+        }
+        episodes
+    }
+}

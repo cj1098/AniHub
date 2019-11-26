@@ -14,6 +14,9 @@ private val TAB_TITLES = arrayOf(
 
 class AnimeDetailPagerAdapter (private val context: Context, fm: FragmentManager, private val id: Int) :
 FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    private var tags = ArrayList<String?>()
+    private var genres = ArrayList<String?>()
+
     override fun getItem(position: Int): Fragment {
         // Fix this else statement
         return when (position) {
@@ -24,7 +27,7 @@ FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
                 return AnimeDetailEpisodesFragment.newInstance(id)
             }
             2 -> {
-                return AnimeDetailSeeMoreFragment.newInstance()
+                return AnimeDetailSeeMoreFragment.newInstance(tags, genres)
             }
             else -> AnimeDetailOverviewFragment.newInstance(id)
         }
@@ -36,6 +39,12 @@ FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getPageTitle(position: Int): CharSequence? {
         return context.resources.getString(TAB_TITLES[position])
+    }
+
+    fun setData(tags: ArrayList<String?>, genres: ArrayList<String?>) {
+        this.tags = tags
+        this.genres = genres
+        notifyDataSetChanged()
     }
 
 }

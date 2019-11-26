@@ -1,0 +1,25 @@
+query SearchAnimeByGenresTagsQuery ($page: Int!, $tags: [String]!, $genres: [String]!) {
+    Page(page: $page) {
+        pageInfo {
+            total
+            perPage
+            currentPage
+            lastPage
+            hasNextPage
+        }
+        media(type: ANIME, tag_in: $tags, genre_in: $genres) {
+            id
+            title {
+                userPreferred
+                romaji
+            }
+            coverImage {
+                color
+                medium
+                large
+                extraLarge
+            }
+            averageScore
+        }
+    }
+}
