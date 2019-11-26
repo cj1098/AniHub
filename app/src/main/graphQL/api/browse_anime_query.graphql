@@ -8,7 +8,7 @@ query BrowseAnimeQuery($page: Int!) {
       lastPage
       hasNextPage
     }
-    media (type: ANIME, season: FALL, sort: [TITLE_ROMAJI]) {
+    media (type: ANIME, sort: [TITLE_ROMAJI]) {
       id
       title {
         userPreferred

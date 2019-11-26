@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.adapter_row_anime_list.view.*
 
 class AnimeListAdapter(val context: Context, val listener: AnimeListFragment.AnimeListInterface) : RecyclerView.Adapter<AnimeListAdapter.ViewHolder>() {
 
-    private var items: List<BrowseAnimeQuery.Medium> = emptyList()
+    private var items: MutableList<BrowseAnimeQuery.Medium> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_row_anime_list, parent, false)
@@ -48,12 +48,14 @@ class AnimeListAdapter(val context: Context, val listener: AnimeListFragment.Ani
         }
     }
 
-    fun setItems(items: List<BrowseAnimeQuery.Medium>?) {
+    fun setItems(items: MutableList<BrowseAnimeQuery.Medium>) {
         // Do something here to protect against if the list is empty..
         // We have no control over nullability because it comes from the api and Kotlin requires us to b
         // null-conscious. So Check if empty here and then post in some interface that we need to display
         // the empty results screen.
-        this.items = items ?: emptyList()
-        notifyDataSetChanged()
+        var size = this.items.size
+        this.items.addAll(items)
+        var sizeNew = this.items.size
+        notifyItemRangeChanged(size, sizeNew)
     }
 }

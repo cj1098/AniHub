@@ -58,4 +58,12 @@
 
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/initial_loading_pb"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        tools:visibility="visible" />
+
 </FrameLayout>

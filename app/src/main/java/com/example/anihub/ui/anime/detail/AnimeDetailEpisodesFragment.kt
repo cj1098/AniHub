@@ -4,8 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.anihub.AniHubApplication
 import com.example.anihub.BaseFragment
 import com.example.anihub.R
@@ -19,6 +23,8 @@ class AnimeDetailEpisodesFragment : BaseFragment() {
 
     private lateinit var animeSharedViewModel: AnimeSharedViewModel
     private lateinit var animeDetailEpisodesAdapter: AnimeDetailEpisodesAdapter
+
+    private lateinit var layoutManager: GridLayoutManager
 
     @Inject
     lateinit var modelFactory: ViewModelFactory
@@ -41,22 +47,25 @@ class AnimeDetailEpisodesFragment : BaseFragment() {
         val id: Int = arguments?.getInt(AnimeActivity.ID) ?: arguments!!.getInt(AnimeActivity.ID)
         animeSharedViewModel = modelFactory.create(AnimeSharedViewModel::class.java)
         setupObservableViewModels()
-        animeSharedViewModel.loadAnimeById(id)
+        animeSharedViewModel.loadAnimeEpisodesById(id)
 
-        anime_details_episodes_recycler.layoutManager = GridLayoutManager(view.context, 4)
+        layoutManager = GridLayoutManager(view.context, 4)
+        anime_details_episodes_recycler.layoutManager = layoutManager
         anime_details_episodes_recycler.addItemDecoration(GridSpaceDecoration(10))
+
         animeDetailEpisodesAdapter = AnimeDetailEpisodesAdapter(requireContext())
         anime_details_episodes_recycler.adapter = animeDetailEpisodesAdapter
         super.onViewCreated(view, savedInstanceState)
     }
 
     private fun setupObservableViewModels() {
-        animeSharedViewModel.searchAnimeByIdLiveData.observe(this, Observer { it ->
-            it.data()?.media?.let {
-                if (it.streamingEpisodes?.isEmpty() == true) {
-                    // display no episodes screen
-                } else {
-                    animeDetailEpisodesAdapter.setItems(it.streamingEpisodes)
+        animeSharedViewModel.searchAnimeEpisodesByIdLiveData.observe(this, Observer { it ->
+            it.data()?.let {
+                it.media?.streamingEpisodes?.let { items ->
+                    if (!items.isNullOrEmpty()) {
+                        initial_loading_pb.isGone = true
+                    }
+                    animeDetailEpisodesAdapter.setItems(items.requireNoNulls())
                 }
             }
         })

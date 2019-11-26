@@ -12,12 +12,11 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
 import com.example.anihub.ui.anime.detail.AnimeActivity
 import com.example.anihub.ui.anime.list.AnimeListFragment
 import com.example.anihub.ui.main.SectionsPagerAdapter
+import com.example.anihub.ui.search.SearchActivity
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -33,16 +32,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toolbar.setTitle(R.string.app_name)
         setSupportActionBar(toolbar)
 
-
-
         val tabsPager = SectionsPagerAdapter(this, supportFragmentManager)
         view_pager.adapter = tabsPager
         tab_layout.setupWithViewPager(view_pager)
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val actionBarDrawerToggle = ActionBarDrawerToggle(
             this,
@@ -64,7 +56,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
+
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.action_search -> {
+                val intent = Intent(this, SearchActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -83,48 +86,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //        ViewCompat.getTransitionName(sharedView)?.let { replaceFragment(R.id.content,
 //            AnimeDetailFragment.newInstance(id, it), AnimeDetailFragment.TAG, true, sharedView) }
     }
-
-    //    fun animateSearchToolbar(numberOfMenuIcon: Int, containsOverflow: Boolean, show: Boolean) {
-//
-//        toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-//        window.statusBarColor = (ContextCompat.getColor(this, R.color.quantum_grey_600))
-//
-//        if (show) {
-//            val width = toolbar.width -
-//                    (if (containsOverflow) resources.getDimensionPixelSize(R.dimen.action_button_overflow_material_width) else 0) -
-//                    resources.getDimensionPixelSize(R.dimen.action_button_material_width) * numberOfMenuIcon / 2
-//            val createCircularReveal = ViewAnimationUtils.createCircularReveal(
-//                toolbar,
-//                width,
-//                toolbar.height / 2,
-//                0.0f,
-//                width.toFloat()
-//            )
-//            createCircularReveal.duration = CIRCULAR_REVEAL_ANIMATION_DURATION
-//            createCircularReveal.start()
-//        } else {
-//            val width = toolbar.width -
-//                    (if (containsOverflow) resources.getDimensionPixelSize(R.dimen.action_button_overflow_material_width) else 0) -
-//                    resources.getDimensionPixelSize(R.dimen.action_button_material_width) * numberOfMenuIcon / 2
-//            val createCircularReveal = ViewAnimationUtils.createCircularReveal(
-//                toolbar,
-//                width,
-//                toolbar.height / 2,
-//                width.toFloat(),
-//                0.0f
-//            )
-//            createCircularReveal.duration = CIRCULAR_REVEAL_ANIMATION_DURATION
-//            createCircularReveal.addListener(object : AnimatorListenerAdapter() {
-//                override fun onAnimationEnd(animation: Animator) {
-//                    super.onAnimationEnd(animation)
-//                    toolbar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
-//                    window.statusBarColor = (ContextCompat.getColor(this@MainActivity, R.color.colorPrimaryDark))
-//                }
-//            })
-//            createCircularReveal.start()
-//            window.statusBarColor = (ContextCompat.getColor(this, R.color.colorPrimaryDark))
-//        }
-//    }
 
     companion object {
         @JvmField
