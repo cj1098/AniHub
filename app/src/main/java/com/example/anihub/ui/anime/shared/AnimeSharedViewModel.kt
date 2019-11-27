@@ -2,11 +2,10 @@ package com.example.anihub.ui.anime.shared
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import api.BrowseAnimeQuery
-import api.SearchAnimeByGenresTagsQuery
-import api.SearchAnimeByIdEpisodeQuery
-import api.SearchAnimeByIdQuery
+import api.*
 import com.apollographql.apollo.ApolloCall
+import com.apollographql.apollo.ApolloCallback
+import com.apollographql.apollo.ApolloQueryCall
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import java.lang.Exception
@@ -20,6 +19,7 @@ class AnimeSharedViewModel @Inject constructor(private val animeSharedRepository
     val searchAnimeByIdLiveData: MutableLiveData<Response<SearchAnimeByIdQuery.Data>> = MutableLiveData()
     val searchAnimeByGenresTagsLiveData: MutableLiveData<Response<SearchAnimeByGenresTagsQuery.Data>> = MutableLiveData()
     val searchAnimeEpisodesByIdLiveData: MutableLiveData<Response<SearchAnimeByIdEpisodeQuery.Data>> = MutableLiveData()
+    val searchAnimeLiveData: MutableLiveData<Response<SearchAnimeQuery.Data>> = MutableLiveData()
     val animeError: MutableLiveData<Exception> = MutableLiveData()
 
     fun loadAllAnime(page: Int) {
@@ -72,6 +72,19 @@ class AnimeSharedViewModel @Inject constructor(private val animeSharedRepository
 
                 override fun onResponse(response: Response<SearchAnimeByGenresTagsQuery.Data>) {
                     searchAnimeByGenresTagsLiveData.postValue(response)
+                }
+            })
+    }
+
+    fun loadAnimeBySearchTerms(page: Int, terms: String) {
+        animeSharedRepository.getAnimeBySearchTerms(page, terms)
+            .enqueue(object : ApolloCall.Callback<SearchAnimeQuery.Data>() {
+                override fun onFailure(e: ApolloException) {
+                    animeError.postValue(e)
+                }
+
+                override fun onResponse(response: Response<SearchAnimeQuery.Data>) {
+                    searchAnimeLiveData.postValue(response)
                 }
             })
     }

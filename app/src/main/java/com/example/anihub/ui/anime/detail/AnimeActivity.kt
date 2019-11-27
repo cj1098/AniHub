@@ -1,9 +1,14 @@
 package com.example.anihub.ui.anime.detail
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import api.SearchAnimeByIdQuery
 import com.bumptech.glide.Glide
@@ -49,10 +54,9 @@ class AnimeActivity : BaseActivity() {
         tab_layout.setupWithViewPager(anime_details_view_pager)
 
         app_bar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
-            anime_detail_title.alpha =
-                abs(verticalOffset / appBarLayout!!.totalScrollRange.toFloat())
-            //expanded_image.alpha = (255 * (1.0f -  abs(verticalOffset.toFloat()) / appBarLayout.totalScrollRange.toFloat()))
-            //Log.d("alphaz", expanded_image.alpha.toString())
+            val offsetAlpha: Float = verticalOffset.toFloat() / app_bar.totalScrollRange
+            anime_detail_title.alpha = abs(offsetAlpha)
+            expanded_image.alpha = 1 - offsetAlpha * -1
         })
 
         animeSharedViewModel.loadAnimeById(id)
@@ -84,9 +88,22 @@ class AnimeActivity : BaseActivity() {
     private fun setupObservableViewModels() {
         animeSharedViewModel.searchAnimeByIdLiveData.observe(this, Observer { it ->
             it.data()?.media?.let {
+                if (it.trailer?.thumbnail.isNullOrEmpty() || it.trailer?.site.isNullOrEmpty()) {
+                    anime_detail_trailer_play.isGone = true
+                    Glide.with(this).load(it.coverImage?.large).into(expanded_image)
+                    expanded_image.setOnClickListener(null)
+                } else {
+                    anime_detail_trailer_play.isVisible = true
+                    Glide.with(this).load(it.trailer?.thumbnail).into(expanded_image)
+                    val trailerUrl = it.trailer?.site
+                    expanded_image.setOnClickListener {0
+                        val playTrailer = Intent()
+                        playTrailer.data = Uri.parse(trailerUrl)
+                        this@AnimeActivity.startActivity(playTrailer)
+                    }
+                }
                 animeDetailPagerAdapter.setData(convertTagsToArrayList(it.tags), convertGenresToArrayList(it.genres))
                 anime_detail_title.text = it.title?.romaji
-                Glide.with(this).load(it.coverImage?.large).into(expanded_image)
             }
         })
 
@@ -95,7 +112,9 @@ class AnimeActivity : BaseActivity() {
 
     private fun convertTagsToArrayList(items: List<SearchAnimeByIdQuery.Tag?>?): ArrayList<String?> {
         val tags = ArrayList<String?>()
-        items?.let { tags.add(it[0]?.name) }
+        if (items?.isNotEmpty() == true) {
+            items.let { tags.add(it[0]?.name) }
+        }
         return tags
     }
 

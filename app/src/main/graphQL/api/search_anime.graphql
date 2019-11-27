@@ -1,0 +1,25 @@
+query SearchAnimeQuery($page: Int!, $query: String!) {
+    Page(page: $page) {
+        pageInfo {
+            total
+            perPage
+            currentPage
+            lastPage
+            hasNextPage
+        }
+        media(type: ANIME, search: $query) {
+            id
+            title {
+                userPreferred
+                romaji
+            }
+            coverImage {
+                color
+                medium
+                large
+                extraLarge
+            }
+            averageScore
+        }
+    }
+}

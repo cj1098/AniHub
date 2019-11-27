@@ -75,11 +75,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    override fun onAnimeItemSelected(
-        id: Int,
-        transitionName: String,
-        sharedView: View
-    ) {
+    override fun onAnimeItemSelected(id: Int) {
         val intent = Intent(this, AnimeActivity::class.java)
         intent.putExtra(ID, id)
         startActivity(intent)

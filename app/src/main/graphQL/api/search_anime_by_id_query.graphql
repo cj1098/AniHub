@@ -118,6 +118,7 @@ query SearchAnimeByIdQuery($id: Int!) {
         trailer {
             id
             site
+            thumbnail
         }
         tags {
             id

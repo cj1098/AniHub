@@ -1,4 +1,4 @@
-package com.example.anihub.ui.anime.list
+package com.example.anihub.ui.search
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import api.BrowseAnimeQuery
+import api.SearchAnimeQuery
 import com.bumptech.glide.Glide
 import com.example.anihub.R
+import com.example.anihub.ui.anime.list.AnimeListAdapter
+import com.example.anihub.ui.anime.list.AnimeListFragment
 import kotlinx.android.synthetic.main.adapter_row_anime_list.view.*
 
-class AnimeListAdapter(val context: Context, val listener: AnimeListFragment.AnimeListInterface) : RecyclerView.Adapter<AnimeListAdapter.ViewHolder>() {
+class AnimeSearchListAdapter(val context: Context, val listener: SearchAnimeFragment.AnimeSearchListInterface) : RecyclerView.Adapter<AnimeSearchListAdapter.ViewHolder>() {
 
-    private var items: MutableList<BrowseAnimeQuery.Medium> = mutableListOf()
+    private var items: MutableList<SearchAnimeQuery.Medium> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_row_anime_list, parent, false)
@@ -31,7 +34,7 @@ class AnimeListAdapter(val context: Context, val listener: AnimeListFragment.Ani
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        fun bind(item: BrowseAnimeQuery.Medium?) {
+        fun bind(item: SearchAnimeQuery.Medium?) {
             item?.let {
                 Glide.with(itemView.context).load(item.coverImage?.large)
                     //.apply(RequestOptions().override(1100, 1100))
@@ -48,11 +51,18 @@ class AnimeListAdapter(val context: Context, val listener: AnimeListFragment.Ani
         }
     }
 
-    fun setItems(items: MutableList<BrowseAnimeQuery.Medium>) {
-        // Do something here to protect against if the list is empty..
-        // We have no control over nullability because it comes from the api and Kotlin requires us to b
-        // null-conscious. So Check if empty here and then post in some interface that we need to display
-        // the empty results screen.
+    fun setItems(items: MutableList<SearchAnimeQuery.Medium>) {
+        // For now we're going to stick to notifyDataSetChanged, but in the future I'd like to add
+        // paging to this and allow searching via tags/genres
+        //var size = this.items.size
+        //this.items.addAll(items)
+        //var sizeNew = this.items.size
+        //notifyItemRangeChanged(size, sizeNew)
+        this.items = items
+        notifyDataSetChanged()
+    }
+
+    fun addItems(items: MutableList<SearchAnimeQuery.Medium>) {
         var size = this.items.size
         this.items.addAll(items)
         var sizeNew = this.items.size

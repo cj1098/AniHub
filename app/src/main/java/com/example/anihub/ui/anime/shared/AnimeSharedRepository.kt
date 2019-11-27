@@ -1,9 +1,6 @@
 package com.example.anihub.ui.anime.shared
 
-import api.BrowseAnimeQuery
-import api.SearchAnimeByGenresTagsQuery
-import api.SearchAnimeByIdEpisodeQuery
-import api.SearchAnimeByIdQuery
+import api.*
 import api.type.MediaType
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.ApolloQueryCall
@@ -27,5 +24,9 @@ class AnimeSharedRepository @Inject constructor(private val apolloClient: Apollo
 
     fun getAnimeEpisodesById(id: Int): ApolloQueryCall<SearchAnimeByIdEpisodeQuery.Data> {
         return apolloClient.query(SearchAnimeByIdEpisodeQuery(id))
+    }
+
+    fun getAnimeBySearchTerms(page: Int, terms: String): ApolloQueryCall<SearchAnimeQuery.Data> {
+        return apolloClient.query(SearchAnimeQuery(page, terms))
     }
 }

@@ -13,13 +13,13 @@ class SearchPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapte
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> {
-                AnimeListFragment.newInstance()
+                SearchAnimeFragment.newInstance()
             }
             1 -> {
-                AnimeListFragment.newInstance() // This is supposed to be Manga
+                SearchAnimeFragment.newInstance() // This is supposed to be Manga
             }
             else -> {
-                AnimeListFragment.newInstance() // Anime by default
+                SearchAnimeFragment.newInstance() // Anime by default
             }
         }
     }
