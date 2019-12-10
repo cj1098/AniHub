@@ -82,13 +82,11 @@ class AnimeListFragment : BaseFragment() {
             }
 
             override fun hideFAB() {
-                if (fab.isShown) {
-                    fab.hide()
-                }
+                listener.hideFAB()
             }
 
             override fun showFAB() {
-                fab.show()
+                listener.showFAB()
             }
         })
         anime_list.addItemDecoration(GridSpaceDecoration(10))
@@ -101,22 +99,21 @@ class AnimeListFragment : BaseFragment() {
     }
 
     private fun setupObservableViewModels() {
-        animeSharedViewModel.browseAllAnimeLiveData.observe(this, Observer { it ->
-            it.data()?.let {
+        animeSharedViewModel.browseAllAnimeLiveData.observe(this, Observer {
+
+            it[0].pageInfo.apply {
                 isLoading = false
                 loading_items_layout.isVisible = false
-                if (it.page?.pageInfo?.hasNextPage == true) {
+                if (this.hasNextPage == true) {
                     isLastPage = false
                     page++
                 } else {
                     isLastPage = true
                 }
-                if (it.page?.media?.isNullOrEmpty() == false) {
+                if (!it.isNullOrEmpty()) {
                     initial_loading_pb.isGone = true
                     empty_results_view.isGone = true
-                    it.page?.media?.let { items ->
-                        animeListAdapter.setItems(items.requireNoNulls().toMutableList())
-                    }
+                    animeListAdapter.setItems(it)
 
                 } else {
                     initial_loading_pb.isVisible = true
@@ -131,6 +128,8 @@ class AnimeListFragment : BaseFragment() {
 
     interface AnimeListInterface {
         fun onAnimeItemSelected(id: Int)
+        fun showFAB()
+        fun hideFAB()
     }
 
     companion object {

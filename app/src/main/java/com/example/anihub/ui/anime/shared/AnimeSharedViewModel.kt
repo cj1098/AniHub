@@ -1,21 +1,30 @@
 package com.example.anihub.ui.anime.shared
 
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import api.*
 import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.ApolloCallback
 import com.apollographql.apollo.ApolloQueryCall
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
+import com.example.anihub.ui.anime.AnimeModel
+import com.example.anihub.ui.anime.AnimeModelFactory
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
 
-class AnimeSharedViewModel @Inject constructor(private val animeSharedRepository: AnimeSharedRepository) :
+class AnimeSharedViewModel @Inject constructor(private val animeSharedRepository: AnimeSharedRepository,
+                                               private val modelFactory: AnimeModelFactory) :
     ViewModel() {
 
     // live data
-    val browseAllAnimeLiveData: MutableLiveData<Response<BrowseAnimeQuery.Data>> = MutableLiveData()
+    val browseAllAnimeLiveData: MutableLiveData<List<AnimeModel>> = MutableLiveData()
     val searchAnimeByIdLiveData: MutableLiveData<Response<SearchAnimeByIdQuery.Data>> = MutableLiveData()
     val searchAnimeByGenresTagsLiveData: MutableLiveData<Response<SearchAnimeByGenresTagsQuery.Data>> = MutableLiveData()
     val searchAnimeEpisodesByIdLiveData: MutableLiveData<Response<SearchAnimeByIdEpisodeQuery.Data>> = MutableLiveData()
@@ -31,7 +40,12 @@ class AnimeSharedViewModel @Inject constructor(private val animeSharedRepository
 
                 override fun onResponse(response: Response<BrowseAnimeQuery.Data>) {
                     // manipulate our responses here so that they never send a nullable value if possible.
-                    browseAllAnimeLiveData.postValue(response)
+                    val animeModels = modelFactory.toAnimeModels(response.data())
+                    animeModels.forEach {
+                        insertAnimeItem(it)
+                    }
+
+                    browseAllAnimeLiveData.postValue(animeModels)
                 }
             })
     }
@@ -44,6 +58,7 @@ class AnimeSharedViewModel @Inject constructor(private val animeSharedRepository
                 }
 
                 override fun onResponse(response: Response<SearchAnimeByIdQuery.Data>) {
+                    testStuff(response.data()?.media?.id!!)
                     searchAnimeByIdLiveData.postValue(response)
                 }
             })
@@ -87,5 +102,21 @@ class AnimeSharedViewModel @Inject constructor(private val animeSharedRepository
                     searchAnimeLiveData.postValue(response)
                 }
             })
+    }
+
+
+    fun testStuff(id: Int) {
+        viewModelScope.launch {
+            val test = animeSharedRepository.getById(id)
+            Log.d("BLAH", "AOSKJD:KJASD")
+
+        }
+    }
+    fun getFromId(id: Int): Deferred<AnimeModel> {
+        return viewModelScope.async { animeSharedRepository.getById(id) }
+    }
+
+    fun insertAnimeItem(animeModel: AnimeModel) {
+        viewModelScope.launch { animeSharedRepository.insert(animeModel) }
     }
 }

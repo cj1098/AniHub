@@ -53,7 +53,8 @@ class AnimeDetailOverviewFragment : BaseFragment() {
                 initial_loading_pb.isGone = true
                 anime_detail_title.text = it.title?.romaji
                 anime_detail_rating.text = getString(R.string.anime_details_rating, (it.averageScore?.toFloat()?.div(RATING_DIVIDER)?.times(10F)).toString())
-                anime_detail_information.text = getString(R.string.anime_details_information, it.startDate?.year.toString(), it.episodes.toString(), it.genres?.get(0), it.studios?.getAnimationStudioName())
+                val genreText = if (it.genres?.isNullOrEmpty() == true) "" else it.genres[0]
+                anime_detail_information.text = getString(R.string.anime_details_information, it.startDate?.year.toString(), it.episodes.toString(), genreText, it.studios?.getAnimationStudioName())
                 anime_detail_description.text = it.description
             }
         })

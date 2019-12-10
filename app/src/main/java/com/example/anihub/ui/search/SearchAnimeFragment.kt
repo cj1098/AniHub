@@ -120,7 +120,7 @@ class SearchAnimeFragment : BaseFragment() {
                     if (page > 1) {
                         animeListAdapter.addItems(it.page.media.requireNoNulls().toMutableList())
                     } else {
-                        it.page?.media?.let { items ->
+                        it.page.media.let { items ->
                             animeListAdapter.setItems(items.requireNoNulls().toMutableList())
                         }
                     }

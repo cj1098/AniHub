@@ -2,10 +2,7 @@ package com.example.anihub.di
 
 import com.example.anihub.AniHubApplication
 import com.example.anihub.MainActivity
-import com.example.anihub.di.modules.ApiModule
-import com.example.anihub.di.modules.AppModule
-import com.example.anihub.di.modules.CacheModule
-import com.example.anihub.di.modules.ContextModule
+import com.example.anihub.di.modules.*
 import com.example.anihub.ui.anime.list.AnimeListFragment
 import com.example.anihub.ui.anime.shared.AnimeSharedViewModel
 import com.example.anihub.ui.anime.ViewModelFactory
@@ -19,7 +16,7 @@ import javax.inject.Singleton
 
 
 @Component(
-    modules = [CacheModule::class, AppModule::class, ApiModule::class, ContextModule::class])
+    modules = [CacheModule::class, AppModule::class, ApiModule::class, ContextModule::class, ModelModule::class])
 @Singleton
 interface AppComponent{
 

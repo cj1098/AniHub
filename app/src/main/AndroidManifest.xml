@@ -31,6 +31,8 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+
+        <activity android:name=".friends.FriendsActivity"></activity>
     </application>
 
 </manifest>

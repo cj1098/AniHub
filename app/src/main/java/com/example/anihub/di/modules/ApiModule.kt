@@ -1,6 +1,8 @@
 package com.example.anihub.di.modules
 
+import android.content.Context
 import com.apollographql.apollo.ApolloClient
+import com.example.anihub.AnihubDB
 import com.example.anihub.BASE_URL
 import com.example.anihub.CacheFactory
 import com.example.anihub.ui.anime.shared.AnimeSharedRepository
@@ -9,7 +11,7 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
-@Module (includes = [AppModule::class, CacheModule::class])
+@Module (includes = [ContextModule::class, AppModule::class, CacheModule::class])
 class ApiModule {
 
     @Singleton
@@ -38,9 +40,10 @@ class ApiModule {
 
     @Singleton
     @Provides
-    fun providesAnimeRepository(apolloClient: ApolloClient): AnimeSharedRepository {
+    fun providesAnimeRepository(apolloClient: ApolloClient, context: Context): AnimeSharedRepository {
+        val animeDao = AnihubDB.getDatabase(context).animeDao()
         return AnimeSharedRepository(
-            apolloClient
+            apolloClient, animeDao
         )
     }
 

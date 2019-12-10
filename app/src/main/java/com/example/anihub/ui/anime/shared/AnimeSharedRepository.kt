@@ -6,9 +6,11 @@ import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.ApolloQueryCall
 import com.apollographql.apollo.cache.normalized.sql.SqlNormalizedCache
 import com.example.anihub.CacheFactory
+import com.example.anihub.ui.anime.AnimeDao
+import com.example.anihub.ui.anime.AnimeModel
 import javax.inject.Inject
 
-class AnimeSharedRepository @Inject constructor(private val apolloClient: ApolloClient) {
+class AnimeSharedRepository @Inject constructor(private val apolloClient: ApolloClient, private val animeDao: AnimeDao) {
 
     fun getAllAnime(page: Int): ApolloQueryCall<BrowseAnimeQuery.Data> {
         return apolloClient.query(BrowseAnimeQuery(page))
@@ -28,5 +30,17 @@ class AnimeSharedRepository @Inject constructor(private val apolloClient: Apollo
 
     fun getAnimeBySearchTerms(page: Int, terms: String): ApolloQueryCall<SearchAnimeQuery.Data> {
         return apolloClient.query(SearchAnimeQuery(page, terms))
+    }
+
+    suspend fun insert(animeModel: AnimeModel) {
+        animeDao.insert(animeModel)
+    }
+
+    suspend fun getAll(): List<AnimeModel> {
+        return animeDao.getAll()
+    }
+
+    suspend fun getById(id: Int): AnimeModel {
+        return animeDao.getById(id)
     }
 }

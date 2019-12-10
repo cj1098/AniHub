@@ -8,14 +8,13 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: 'com.apollographql.android'
 
-def room_version = "2.2.1"
 android {
-    compileSdkVersion 29
+    compileSdkVersion rootProject.compileSdkVersion
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.example.anihub"
-        minSdkVersion 25
-        targetSdkVersion 29
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -41,56 +40,134 @@ android {
     }
 }
 
+ext {
+    paging_version = '2.1.0'
+    appcompat_version = '1.1.0'
+    constraint_version = '1.1.3'
+    coreKtx_version = '1.1.0'
+    cardView_version = '1.0.0'
+    legacy_version = '1.0.0'
+    material_version = '1.0.0'
+    navigation_version = '2.1.0'
+    glide_version = '4.10.0'
+    rxjava3_version = '3.0.0-RC4'
+    rxjava2_version = '2.1.1'
+    retrofit_version = '2.5.0'
+    rxBinding_version = '3.1.0'
+    lifecycle_version = "2.1.0"
+    apollo_version = "1.2.1"
+    room_version = "2.2.2"
+    moshi_version = "1.9.1"
+    dagger_version = "2.25.2"
+    junit_version = "4.12"
+    test_runner_version = "1.2.0"
+    espresso_version = "3.2.0"
+    gson_version = "2.8.6" // barf
+
+    generalDependencies = [
+            kotlin : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
+            paging : "androidx.paging:paging-runtime:$paging_version",
+            appCompat : "androidx.appcompat:appcompat:$appcompat_version",
+            constraintLayout : "androidx.constraintlayout:constraintlayout:$constraint_version",
+            coreKtx : "androidx.core:core-ktx:$coreKtx_version",
+            cardView : "androidx.cardview:cardview:$cardView_version",
+            legacy : "androidx.legacy:legacy-support-v4:$legacy_version",
+            material : "com.google.android.material:material:$material_version",
+            navigationFragment : "androidx.navigation:navigation-fragment:$navigation_version",
+            navigationFragmentKtx : "androidx.navigation:navigation-fragment-ktx:$navigation_version",
+            navigationUi : "androidx.navigation:navigation-ui:$navigation_version",
+            navigationUiKtx : "androidx.navigation:navigation-ui-ktx:$navigation_version",
+            glide : "com.github.bumptech.glide:glide:$glide_version",
+            glideCompiler : "com.github.bumptech.glide:compiler:$glide_version",
+            rxjava3 : "io.reactivex.rxjava3:rxjava:$rxjava3_version",
+            rxjava2 : "io.reactivex.rxjava2:rxandroid:$rxjava2_version",
+            retrofit : "com.squareup.retrofit2:retrofit:$retrofit_version",
+            rxBinding : "com.jakewharton.rxbinding3:rxbinding:$rxBinding_version",
+            rxBindingCore : "com.jakewharton.rxbinding3:rxbinding-core:$rxBinding_version",
+            rxBindingAppCompat : "com.jakewharton.rxbinding3:rxbinding-appcompat:$rxBinding_version",
+            rxBindingDrawerLayout : "com.jakewharton.rxbinding3:rxbinding-drawerlayout:$rxBinding_version",
+            rxBindingLeanback : "com.jakewharton.rxbinding3:rxbinding-leanback:$rxBinding_version",
+            rxBindingRecyclerview : "com.jakewharton.rxbinding3:rxbinding-recyclerview:$rxBinding_version",
+            rxBindingSlidingPaneLayout : "com.jakewharton.rxbinding3:rxbinding-slidingpanelayout:$rxBinding_version",
+            rxBindingSwipeRefreshLayout : "com.jakewharton.rxbinding3:rxbinding-swiperefreshlayout:$rxBinding_version",
+            rxBindingViewPager : "com.jakewharton.rxbinding3:rxbinding-viewpager:$rxBinding_version",
+            rxBindingViewPager2 : "com.jakewharton.rxbinding3:rxbinding-viewpager2:$rxBinding_version",
+            rxBindingMaterial : "com.jakewharton.rxbinding3:rxbinding-material:$rxBinding_version",
+            lifecycle : "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
+            apollo : "com.apollographql.apollo:apollo-runtime:$apollo_version",
+            apolloSupport : "com.apollographql.apollo:apollo-android-support:$apollo_version",
+            room : "androidx.room:room-runtime:$room_version",
+            roomCompiler : "androidx.room:room-compiler:$room_version",
+            roomKtx : "androidx.room:room-ktx:$room_version",
+            roomRx : "androidx.room:room-rxjava2:$room_version",
+            moshi : "com.squareup.moshi:moshi:$moshi_version",
+            moshiCodegen : "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version",
+            dagger : "com.google.dagger:dagger-android:$dagger_version",
+            daggerSupport : "com.google.dagger:dagger-android-support:$dagger_version",
+            daggerProcessor : "com.google.dagger:dagger-android-processor:$dagger_version",
+            daggerCompiler : "com.google.dagger:dagger-compiler:$dagger_version",
+            junit : "junit:junit:$junit_version",
+            testRunner : "androidx.test:runner:$test_runner_version",
+            espresso : "androidx.test.espresso:espresso-core:$espresso_version",
+            gson : "com.google.code.gson:gson:$gson_version"
+    ]
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "androidx.paging:paging-runtime:2.1.0"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.navigation:navigation-fragment:2.1.0'
-    implementation 'androidx.navigation:navigation-ui:2.1.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
-    implementation 'com.github.bumptech.glide:glide:4.10.0'
-    implementation 'io.reactivex.rxjava3:rxjava:3.0.0-RC4'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding:3.1.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding-core:3.1.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.1.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding-drawerlayout:3.1.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding-leanback:3.1.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding-recyclerview:3.1.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding-slidingpanelayout:3.1.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding-swiperefreshlayout:3.1.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding-viewpager:3.1.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding-viewpager2:3.1.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding-material:3.1.0'
     implementation("org.jetbrains:annotations:13.0")
-
     testImplementation("org.jetbrains:annotations:13.0")
+    implementation generalDependencies.kotlin
+    implementation generalDependencies.paging
+    implementation generalDependencies.appCompat
+    implementation generalDependencies.coreKtx
+    implementation generalDependencies.constraintLayout
+    implementation generalDependencies.cardView
+    implementation generalDependencies.legacy
+    implementation generalDependencies.material
+    implementation generalDependencies.navigationFragment
+    implementation generalDependencies.navigationFragmentKtx
+    implementation generalDependencies.navigationUi
+    implementation generalDependencies.navigationUiKtx
+    implementation generalDependencies.lifecycle
+    implementation generalDependencies.glide
+    implementation generalDependencies.rxjava3
+    implementation generalDependencies.rxjava2
+    implementation generalDependencies.retrofit
+    implementation generalDependencies.rxBinding
+    implementation generalDependencies.rxBindingCore
+    implementation generalDependencies.rxBindingAppCompat
+    implementation generalDependencies.rxBindingDrawerLayout
+    implementation generalDependencies.rxBindingLeanback
+    implementation generalDependencies.rxBindingRecyclerview
+    implementation generalDependencies.rxBindingSlidingPaneLayout
+    implementation generalDependencies.rxBindingSwipeRefreshLayout
+    implementation generalDependencies.rxBindingViewPager
+    implementation generalDependencies.rxBindingViewPager2
+    implementation generalDependencies.rxBindingMaterial
+    implementation generalDependencies.apollo
+    implementation generalDependencies.apolloSupport
+    implementation generalDependencies.moshi
+    implementation generalDependencies.gson
 
-    implementation "com.apollographql.apollo:apollo-runtime:1.2.1"
-    implementation 'com.apollographql.apollo:apollo-android-support:1.2.1'
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-rxjava2:$room_version"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.9.1"
-    implementation "com.squareup.moshi:moshi:1.9.1"
+    // DB
+    implementation generalDependencies.room
+    implementation generalDependencies.roomRx
+    implementation generalDependencies.roomKtx
 
-    implementation 'com.google.dagger:dagger-android:2.25.2'
-    implementation 'com.google.dagger:dagger-android-support:2.25.2'
-    // if you use the support libraries
-    kapt 'com.google.dagger:dagger-android-processor:2.25.2'
-    kapt 'com.google.dagger:dagger-compiler:2.25.2'
-    kapt 'com.github.bumptech.glide:compiler:4.10.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    // DI
+    implementation generalDependencies.dagger
+    implementation generalDependencies.daggerSupport
 
+    // compilers/processors/codegen
+    kapt generalDependencies.moshiCodegen
+    kapt generalDependencies.roomCompiler
+    kapt generalDependencies.daggerProcessor
+    kapt generalDependencies.daggerCompiler
+    kapt generalDependencies.glideCompiler
+
+    // testing
+    testImplementation generalDependencies.junit
+    androidTestImplementation generalDependencies.testRunner
+    androidTestImplementation generalDependencies.espresso
 }

@@ -53,7 +53,7 @@ class AnimeActivity : BaseActivity() {
         anime_details_view_pager.adapter = tabsPager
         tab_layout.setupWithViewPager(anime_details_view_pager)
 
-        app_bar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+        app_bar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
             val offsetAlpha: Float = verticalOffset.toFloat() / app_bar.totalScrollRange
             anime_detail_title.alpha = abs(offsetAlpha)
             expanded_image.alpha = 1 - offsetAlpha * -1
@@ -96,7 +96,7 @@ class AnimeActivity : BaseActivity() {
                     anime_detail_trailer_play.isVisible = true
                     Glide.with(this).load(it.trailer?.thumbnail).into(expanded_image)
                     val trailerUrl = it.trailer?.site
-                    expanded_image.setOnClickListener {0
+                    expanded_image.setOnClickListener {
                         val playTrailer = Intent()
                         playTrailer.data = Uri.parse(trailerUrl)
                         this@AnimeActivity.startActivity(playTrailer)
