@@ -26,6 +26,7 @@ query SearchAnimeByIdQuery($id: Int!) {
         coverImage {
             large
             medium
+            extraLarge
         }
         bannerImage
         format

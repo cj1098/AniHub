@@ -59,14 +59,13 @@ class AnimeDetailEpisodesFragment : BaseFragment() {
     }
 
     private fun setupObservableViewModels() {
-        animeSharedViewModel.searchAnimeEpisodesByIdLiveData.observe(this, Observer { it ->
-            it.data()?.let {
-                it.media?.streamingEpisodes?.let { items ->
-                    if (!items.isNullOrEmpty()) {
-                        initial_loading_pb.isGone = true
-                    }
-                    animeDetailEpisodesAdapter.setItems(items.requireNoNulls())
+        animeSharedViewModel.searchAnimeEpisodesByIdLiveData.observe(this, Observer {
+            it.media.streamingEpisodes?.let { items ->
+                if (items.isNullOrEmpty()) {
+                    empty_results_view.isVisible = true
                 }
+                initial_loading_pb.isGone = true
+                animeDetailEpisodesAdapter.setItems(items)
             }
         })
 

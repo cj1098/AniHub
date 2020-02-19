@@ -3,7 +3,6 @@ package com.example.anihub
 import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -82,14 +81,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             friends_layout.animate()
                 .x(friendsLayoutInitialX)
-                .setDuration(500)
+                .setDuration(FRIENDS_LAYOUT_APPEAR_ANIMATION_TIME)
                 .start()
-
-            Log.d("Friends", friends_layout.x.toString())
         }
 
         val navView: NavigationView = findViewById(R.id.nav_view)
         navView.setNavigationItemSelectedListener(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (!disposable.isDisposed) {
+            disposable.dispose()
+        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -145,12 +149,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (friends_layout.x > collapseThreshhold) {
                     friends_layout.animate()
                         .x(screenWidth.toFloat())
-                        .setDuration(200)
+                        .setDuration(FRIENDS_LAYOUT_COLLAPSE_ANIMATION_TIME)
                         .start()
                 } else if (friends_layout.x < collapseThreshhold) { // If we don't, just revert back the original position
                     friends_layout.animate()
                         .x(friendsLayoutInitialX)
-                        .setDuration(200)
+                        .setDuration(FRIENDS_LAYOUT_COLLAPSE_ANIMATION_TIME)
                         .start()
                 }
             }
@@ -179,5 +183,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val TAG = MainActivity::class.java
 
         const val ID = "ID"
+        const val FRIENDS_LAYOUT_COLLAPSE_ANIMATION_TIME = 200L
+        const val FRIENDS_LAYOUT_APPEAR_ANIMATION_TIME = 500L
     }
 }

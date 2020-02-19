@@ -1,6 +1,7 @@
 package com.example.anihub
 
 import android.content.Context
+import android.util.Log
 import androidx.annotation.NonNull
 import com.apollographql.apollo.api.Operation.Variables
 import com.apollographql.apollo.api.ResponseField
@@ -11,6 +12,7 @@ import com.apollographql.apollo.cache.normalized.NormalizedCacheFactory
 import com.apollographql.apollo.cache.normalized.sql.ApolloSqlHelper
 import com.apollographql.apollo.cache.normalized.sql.SqlNormalizedCacheFactory
 import org.jetbrains.annotations.NotNull
+import java.math.BigDecimal
 
 
 @Suppress("UNCHECKED_CAST")
@@ -27,11 +29,20 @@ class CacheFactory(val context: Context) {
         val resolver: CacheKeyResolver = object : CacheKeyResolver() {
             @NotNull
             override fun fromFieldRecordSet(@NotNull field: ResponseField, @NotNull recordSet: Map<String, Any>): CacheKey {
-                return formatCacheKey(recordSet["media"] as String?)
+                return if (recordSet["id"] == null) {
+                    CacheKey.NO_KEY
+                } else {
+                    // Need to check for other types here apparently -_-
+                    if (recordSet["id"] is String) {
+                        formatCacheKey((recordSet["id"] as String))
+                    } else {
+                        formatCacheKey((recordSet["id"] as BigDecimal?).toString())
+                    }
+                }
             }
 
             override fun fromFieldArguments(field: ResponseField, @NonNull variables: Variables): CacheKey {
-                return formatCacheKey(field.resolveArgument("id", variables) as String?)
+                return CacheKey.NO_KEY
             }
 
             private fun formatCacheKey(id: String?): CacheKey {

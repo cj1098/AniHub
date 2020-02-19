@@ -2,7 +2,8 @@ package com.example.anihub.di.modules
 
 import android.content.Context
 import com.apollographql.apollo.ApolloClient
-import com.example.anihub.AnihubDB
+import com.apollographql.apollo.api.cache.http.HttpCachePolicy.CACHE_FIRST
+import com.apollographql.apollo.cache.normalized.sql.SqlNormalizedCache
 import com.example.anihub.BASE_URL
 import com.example.anihub.CacheFactory
 import com.example.anihub.ui.anime.shared.AnimeSharedRepository
@@ -34,17 +35,15 @@ class ApiModule {
             .build()
 
         // apollo caching
-        // normalizedCache(cacheFactory.provideNormalizedDiskCache<SqlNormalizedCache>().first, cacheFactory.provideNormalizedDiskCache<SqlNormalizedCache>().second)
-        return ApolloClient.builder().okHttpClient(okHttpClient).serverUrl(BASE_URL).build()
+
+        return ApolloClient.builder().normalizedCache(cacheFactory.provideNormalizedDiskCache<SqlNormalizedCache>().first, cacheFactory.provideNormalizedDiskCache<SqlNormalizedCache>().second)
+            .defaultHttpCachePolicy(CACHE_FIRST).okHttpClient(okHttpClient).serverUrl(BASE_URL).build()
     }
 
     @Singleton
     @Provides
     fun providesAnimeRepository(apolloClient: ApolloClient, context: Context): AnimeSharedRepository {
-        val animeDao = AnihubDB.getDatabase(context).animeDao()
-        return AnimeSharedRepository(
-            apolloClient, animeDao
-        )
+        return AnimeSharedRepository(apolloClient)
     }
 
 }

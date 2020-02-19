@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.example.anihub.AniHubApplication
 import com.example.anihub.BaseActivity
 import com.example.anihub.R
+import com.example.anihub.ui.anime.AnimeModel
 import com.example.anihub.ui.anime.ViewModelFactory
 import com.example.anihub.ui.anime.shared.AnimeSharedViewModel
 import com.google.android.material.appbar.AppBarLayout
@@ -87,10 +88,10 @@ class AnimeActivity : BaseActivity() {
 
     private fun setupObservableViewModels() {
         animeSharedViewModel.searchAnimeByIdLiveData.observe(this, Observer { it ->
-            it.data()?.media?.let {
+            it.media.let {
                 if (it.trailer?.thumbnail.isNullOrEmpty() || it.trailer?.site.isNullOrEmpty()) {
                     anime_detail_trailer_play.isGone = true
-                    Glide.with(this).load(it.coverImage?.large).into(expanded_image)
+                    Glide.with(this).load(it.coverImage).into(expanded_image)
                     expanded_image.setOnClickListener(null)
                 } else {
                     anime_detail_trailer_play.isVisible = true
@@ -103,17 +104,17 @@ class AnimeActivity : BaseActivity() {
                     }
                 }
                 animeDetailPagerAdapter.setData(convertTagsToArrayList(it.tags), convertGenresToArrayList(it.genres))
-                anime_detail_title.text = it.title?.romaji
+                anime_detail_title.text = it.title
             }
         })
 
         animeSharedViewModel.animeError.observe(this, Observer { onError(it) })
     }
 
-    private fun convertTagsToArrayList(items: List<SearchAnimeByIdQuery.Tag?>?): ArrayList<String?> {
+    private fun convertTagsToArrayList(items: List<AnimeModel.Tag>?): ArrayList<String?> {
         val tags = ArrayList<String?>()
         if (items?.isNotEmpty() == true) {
-            items.let { tags.add(it[0]?.name) }
+            items.let { tags.add(it[0].name) }
         }
         return tags
     }

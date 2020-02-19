@@ -23,7 +23,7 @@
     <string name="anime_details_tab_text_episodes">Episodes</string>
     <string name="anime_details_tab_text_see_more">See More</string>
     <string name="anime_details_rating">AniList : %1$s / 10</string>
-    <string name="anime_details_information">%1$s | %2$s | %3$s | %4$s</string>
+    <string name="anime_details_information">%1$d | %2$s | %3$s | %4$s</string>
     <string name="anime_details_episode_naming">Episode %d</string>
     <string name="loading_text">Loading More&#8230;</string>
     <string name="tab_text_home">HOME</string>

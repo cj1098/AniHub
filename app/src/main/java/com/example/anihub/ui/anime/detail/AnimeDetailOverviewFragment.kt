@@ -11,6 +11,7 @@ import com.example.anihub.AniHubApplication
 import com.example.anihub.BaseFragment
 import com.example.anihub.R
 import com.example.anihub.di.DaggerAppComponent
+import com.example.anihub.ui.anime.AnimeModel
 import com.example.anihub.ui.anime.ViewModelFactory
 import com.example.anihub.ui.anime.shared.AnimeSharedViewModel
 import kotlinx.android.synthetic.main.activity_anime.*
@@ -49,12 +50,12 @@ class AnimeDetailOverviewFragment : BaseFragment() {
 
     private fun setupObservableViewModels() {
         animeSharedViewModel.searchAnimeByIdLiveData.observe(this, Observer { it ->
-            it.data()?.media?.let {
+            it.media.let {
                 initial_loading_pb.isGone = true
-                anime_detail_title.text = it.title?.romaji
-                anime_detail_rating.text = getString(R.string.anime_details_rating, (it.averageScore?.toFloat()?.div(RATING_DIVIDER)?.times(10F)).toString())
+                anime_detail_title.text = it.title
+                anime_detail_rating.text = getString(R.string.anime_details_rating, (it.averageScore.toFloat().div(RATING_DIVIDER).times(10F)).toString())
                 val genreText = if (it.genres?.isNullOrEmpty() == true) "" else it.genres[0]
-                anime_detail_information.text = getString(R.string.anime_details_information, it.startDate?.year.toString(), it.episodes.toString(), genreText, it.studios?.getAnimationStudioName())
+                anime_detail_information.text = getString(R.string.anime_details_information, it.startDate, it.episodes.toString(), genreText, it.studios?.getAnimationStudioName())
                 anime_detail_description.text = it.description
             }
         })
@@ -75,8 +76,8 @@ class AnimeDetailOverviewFragment : BaseFragment() {
             return animeDetailOverviewFragment
         }
 
-        fun SearchAnimeByIdQuery.Studio.getAnimationStudioName(): String {
-            nodes?.forEach { if (it?.isAnimationStudio == true) return it.name }
+        fun AnimeModel.Studios.getAnimationStudioName(): String {
+            nodes.forEach { if (it.isAnimationStudio) return it.name }
             return ""
         }
     }

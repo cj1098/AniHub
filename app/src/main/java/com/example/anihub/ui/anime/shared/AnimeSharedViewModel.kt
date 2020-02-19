@@ -25,9 +25,9 @@ class AnimeSharedViewModel @Inject constructor(private val animeSharedRepository
 
     // live data
     val browseAllAnimeLiveData: MutableLiveData<List<AnimeModel>> = MutableLiveData()
-    val searchAnimeByIdLiveData: MutableLiveData<Response<SearchAnimeByIdQuery.Data>> = MutableLiveData()
+    val searchAnimeByIdLiveData: MutableLiveData<AnimeModel> = MutableLiveData()
+    val searchAnimeEpisodesByIdLiveData: MutableLiveData<AnimeModel> = MutableLiveData()
     val searchAnimeByGenresTagsLiveData: MutableLiveData<Response<SearchAnimeByGenresTagsQuery.Data>> = MutableLiveData()
-    val searchAnimeEpisodesByIdLiveData: MutableLiveData<Response<SearchAnimeByIdEpisodeQuery.Data>> = MutableLiveData()
     val searchAnimeLiveData: MutableLiveData<Response<SearchAnimeQuery.Data>> = MutableLiveData()
     val animeError: MutableLiveData<Exception> = MutableLiveData()
 
@@ -39,12 +39,9 @@ class AnimeSharedViewModel @Inject constructor(private val animeSharedRepository
                 }
 
                 override fun onResponse(response: Response<BrowseAnimeQuery.Data>) {
+                    Log.d("chris", response.data()?.page?.pageInfo?.total.toString())
                     // manipulate our responses here so that they never send a nullable value if possible.
                     val animeModels = modelFactory.toAnimeModels(response.data())
-                    animeModels.forEach {
-                        insertAnimeItem(it)
-                    }
-
                     browseAllAnimeLiveData.postValue(animeModels)
                 }
             })
@@ -58,8 +55,9 @@ class AnimeSharedViewModel @Inject constructor(private val animeSharedRepository
                 }
 
                 override fun onResponse(response: Response<SearchAnimeByIdQuery.Data>) {
-                    testStuff(response.data()?.media?.id!!)
-                    searchAnimeByIdLiveData.postValue(response)
+                    val animeModel = modelFactory.toAnimeModel(response.data())
+
+                    searchAnimeByIdLiveData.postValue(animeModel)
                 }
             })
     }
@@ -72,7 +70,8 @@ class AnimeSharedViewModel @Inject constructor(private val animeSharedRepository
                 }
 
                 override fun onResponse(response: Response<SearchAnimeByIdEpisodeQuery.Data>) {
-                    searchAnimeEpisodesByIdLiveData.postValue(response)
+                    val animeModel = modelFactory.toAnimeModel(response.data())
+                    searchAnimeEpisodesByIdLiveData.postValue(animeModel)
                 }
             })
     }
@@ -104,19 +103,4 @@ class AnimeSharedViewModel @Inject constructor(private val animeSharedRepository
             })
     }
 
-
-    fun testStuff(id: Int) {
-        viewModelScope.launch {
-            val test = animeSharedRepository.getById(id)
-            Log.d("BLAH", "AOSKJD:KJASD")
-
-        }
-    }
-    fun getFromId(id: Int): Deferred<AnimeModel> {
-        return viewModelScope.async { animeSharedRepository.getById(id) }
-    }
-
-    fun insertAnimeItem(animeModel: AnimeModel) {
-        viewModelScope.launch { animeSharedRepository.insert(animeModel) }
-    }
 }

@@ -11,10 +11,11 @@ import api.SearchAnimeByIdEpisodeQuery
 import api.SearchAnimeByIdQuery
 import com.bumptech.glide.Glide
 import com.example.anihub.R
+import com.example.anihub.ui.anime.AnimeModel
 import kotlinx.android.synthetic.main.adapter_row_anime_details_episodes.view.*
 
 class AnimeDetailEpisodesAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var data: List<SearchAnimeByIdEpisodeQuery.StreamingEpisode> = emptyList()
+    private var data: List<AnimeModel.StreamingEpisode> = emptyList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.adapter_row_anime_details_episodes, parent, false)
         return AnimeDetailsEpisodeViewHolder(view, context)
@@ -29,7 +30,7 @@ class AnimeDetailEpisodesAdapter(private val context: Context) : RecyclerView.Ad
     }
 
     class AnimeDetailsEpisodeViewHolder(itemView: View, val context: Context) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: SearchAnimeByIdEpisodeQuery.StreamingEpisode, position: Int) {
+        fun bind(item: AnimeModel.StreamingEpisode, position: Int) {
             Glide.with(context).load(item.thumbnail).into(itemView.anime_details_episode_thumbnail)
             itemView.anime_detail_episode_title.text = context.getString(R.string.anime_details_episode_naming, position + 1)
             itemView.setOnClickListener {
@@ -42,7 +43,7 @@ class AnimeDetailEpisodesAdapter(private val context: Context) : RecyclerView.Ad
         }
     }
 
-    fun setItems(items: List<SearchAnimeByIdEpisodeQuery.StreamingEpisode>) {
+    fun setItems(items: List<AnimeModel.StreamingEpisode>) {
         data = items
         notifyDataSetChanged()
     }

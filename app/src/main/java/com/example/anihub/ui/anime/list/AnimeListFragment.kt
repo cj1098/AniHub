@@ -29,7 +29,7 @@ class AnimeListFragment : BaseFragment() {
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private var isLastPage: Boolean = false
     private var isLoading: Boolean = false
-    private var page = 1
+    private var page = 2 // TODO: go back and change this to 1. The api has a bug currently
 
     @Inject
     lateinit var modelFactory: ViewModelFactory
@@ -104,7 +104,7 @@ class AnimeListFragment : BaseFragment() {
             it[0].pageInfo.apply {
                 isLoading = false
                 loading_items_layout.isVisible = false
-                if (this.hasNextPage == true) {
+                if (this?.hasNextPage == true) {
                     isLastPage = false
                     page++
                 } else {

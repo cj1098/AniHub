@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "anime")
 data class AnimeModel(@PrimaryKey(autoGenerate = true) val id: Int,
-                      val pageInfo: PageInfo,
+                      val pageInfo: PageInfo? = null,
                       val media: Media) {
 
 
@@ -41,17 +41,22 @@ data class AnimeModel(@PrimaryKey(autoGenerate = true) val id: Int,
         val season: String = "",
         val source: String = "",
         val staff: Staff? = null,
-        val startDate: String = "",
+        val startDate: Int? = null,
         val stats: Stats? = null,
         val status: String = "",
         val streamingEpisodes: List<StreamingEpisode>? = null,
         val studios: Studios? = null,
         val synonyms: List<String>? = null,
         val tags: List<Tag>? = null,
-        val title: String,
-        val trailer: Any? = null,
+        val title: String = "",
+        val trailer: Trailer? = null,
         val type: String = "",
         val volumes: Int = 0
+    )
+
+    data class Trailer(
+        val thumbnail: String,
+        val site: String
     )
 
     data class Characters(

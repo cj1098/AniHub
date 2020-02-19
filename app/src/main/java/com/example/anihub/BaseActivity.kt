@@ -15,6 +15,9 @@ open class BaseActivity : AppCompatActivity() {
             is IllegalStateException -> {
                 //Log.e(ERROR, getString(R.string.no_implementation))
             }
+            else -> {
+                Log.e(ERROR, exception.message)
+            }
         }
     }
 }
