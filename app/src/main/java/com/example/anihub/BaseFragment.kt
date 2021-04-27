@@ -27,6 +27,7 @@ open class BaseFragment : Fragment() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
+
     // This function could somehow be just used in BaseActivity...
     fun onError(exception: Exception) {
         when (exception) {
