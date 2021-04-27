@@ -84,11 +84,11 @@ pruneLocal() {
 
 pruneRemote() {
 	echo "These branches will be deleted on origin"
-	git branch -r --merged | grep -v develop | sed 's/origin\///' | xargs
+	git branch -r --merged develop | grep -v master | grep -v develop | sed 's/origin\///'
 	echo "Continue? (Y/N): " 
 	read confirm
 	if [[ $confirm == Y || $confirm == y ]] {
-		git branch -r --merged | grep -v develop | sed 's/origin\///' | xargs -n 1 git push --delete origin
+		git branch -r --merged develop | egrep -v "(^\*|^\s*(master|develop|release)$)" | sed 's/origin\///' | xargs -n 1 git push --delete origin
 		echo "branches deleted successfully"
 	} else {
 		echo "Exiting"
